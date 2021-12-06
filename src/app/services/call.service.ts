@@ -1,29 +1,31 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 // import * as Peer from 'peerjs';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, throwError } from 'rxjs';
 import { v4 as uuidv4 } from 'uuid';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { ThisReceiver } from '@angular/compiler';
+import { catchError, retry } from 'rxjs/operators';
 
 declare var Peer: any;
 
 @Injectable()
 export class CallService {
   private peer!: any;
-  private mediaCall!: any
+  private mediaCall!: any;
+  public peerIdOfdReciever!: string;
 
-  private localStreamBs: BehaviorSubject<MediaStream> = new BehaviorSubject<any>(
-    null
-  );
+  private localStreamBs: BehaviorSubject<MediaStream> =
+    new BehaviorSubject<any>(null);
   public localStream$ = this.localStreamBs.asObservable();
-  private remoteStreamBs: BehaviorSubject<MediaStream> = new BehaviorSubject<any>(
-    null
-  );
+  private remoteStreamBs: BehaviorSubject<MediaStream> =
+    new BehaviorSubject<any>(null);
   public remoteStream$ = this.remoteStreamBs.asObservable();
 
   private isCallStartedBs = new Subject<boolean>();
   public isCallStarted$ = this.isCallStartedBs.asObservable();
 
-  constructor(private snackBar: MatSnackBar) {}
+  constructor(private snackBar: MatSnackBar, private http: HttpClient) {}
 
   public initPeer(): any {
     if (!this.peer || this.peer.disconnected) {
@@ -40,6 +42,7 @@ export class CallService {
           ],
         },
       };
+
       try {
         let id = uuidv4();
         this.peer = new Peer(id, peerJsOptions);
@@ -117,6 +120,10 @@ export class CallService {
     }
   }
 
+  public setPeerID(peerID: string) {
+    this.peerIdOfdReciever = peerID;
+  }
+
   private onCallClose() {
     this.remoteStreamBs?.value.getTracks().forEach((track) => {
       track.stop();
@@ -139,5 +146,31 @@ export class CallService {
     this.mediaCall?.close();
     this.peer?.disconnect();
     this.peer?.destroy();
+  }
+
+  httpOptions = {
+    headers: new HttpHeaders({
+      'Content-Type': 'application/json',
+    }),
+  };
+
+  public getPeerId(): Observable<any> {
+    return this.http
+      .get<any>('http://localhost:8889/api/peer-id', this.httpOptions)
+      .pipe(retry(1), catchError(this.handleError));
+    // return this.http.get<any>('http://localhost:8889/api/peer-id')
+  }
+
+  handleError(error: any) {
+    let errorMessage = '';
+    if (error.error instanceof ErrorEvent) {
+      // Get client-side error
+      errorMessage = error.error.message;
+    } else {
+      // Get server-side error
+      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+    }
+    window.alert(errorMessage);
+    return throwError(errorMessage);
   }
 }

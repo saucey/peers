@@ -1,36 +1,43 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
-import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { Route, RouterModule } from '@angular/router';
+import { TemplateComponent } from './template/template.component';
+import { TemplateModule } from './template/template.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FormsModule } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { ClipboardModule } from '@angular/cdk/clipboard';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { CallinfoDialogModule } from './callinfo-dialog/callinfo-dialog.module';
 
-
+export const mainRoute: Route[] = [
+  {
+    path: '',
+    component: TemplateComponent,
+    children: [
+      {
+        path: '',
+        loadChildren: () =>
+          import('./home/home.module').then((m) => m.HomeModule),
+      },
+      {
+        path: 'call-reciever',
+        loadChildren: () =>
+          import('./reciever/reciever.module').then((m) => m.RecieverModule),
+      },
+      {
+        path: 'call-sender',
+        loadChildren: () =>
+          import('./sender/sender.module').then((m) => m.SenderModule),
+      },
+    ],
+  },
+];
 @NgModule({
   declarations: [AppComponent],
   imports: [
     BrowserModule,
-    AppRoutingModule,
     BrowserAnimationsModule,
-    FormsModule,
-    MatButtonModule,
-    MatDialogModule,
-    MatFormFieldModule,
-    MatInputModule,
-    ClipboardModule,
-    MatSnackBarModule,
-    CallinfoDialogModule,
+    TemplateModule,
+    RouterModule.forRoot(mainRoute),
   ],
   providers: [],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
-

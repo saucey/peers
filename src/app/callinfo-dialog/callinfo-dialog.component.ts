@@ -12,10 +12,11 @@ export class CallInfoDialogComponent {
     public dialogRef: MatDialogRef<CallInfoDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     private _snackBar: MatSnackBar
-  ) {}
+  ) {
+    console.log(this.data, '??????')
+  }
 
   public showCopiedSnackBar() {
-    alert('here')
     this._snackBar.open('Peer ID Copied!', 'Hurrah', {
       duration: 1000,
       horizontalPosition: 'center',
@@ -25,6 +26,6 @@ export class CallInfoDialogComponent {
 }
 
 export interface DialogData {
-  peerId?: string;
+  peerId?: any;
   joinCall?: boolean;
 }

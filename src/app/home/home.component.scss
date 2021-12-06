@@ -1,0 +1,28 @@
+h1 {
+  font-weight: 100;
+  color: #0055c9;
+  margin-top: 40px;
+}
+
+.btn-custom-1 {
+  background-color: #0055c9;
+  color: white;
+}
+
+.none-rounded {
+  border-radius: 0;
+}
+
+.input-group {
+  &.wrapper {
+    margin-bottom: 20px;
+    input {
+      border-radius: 0;
+    }
+  }
+}
+
+.my-peer-id {
+  color: #0055c9;
+  font-weight: 100;
+}
