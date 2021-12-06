@@ -22,10 +22,7 @@ export class SenderComponent implements OnInit, OnDestroy {
   constructor(public dialog: MatDialog, private callService: CallService) {
     this.isCallStarted$ = this.callService.isCallStarted$;
     this.peerId = this.callService.initPeer();
-    console.log(this.peerId, 'here');
     this.callService.peerIdOfdReciever;
-    console.log(this.callService.peerIdOfdReciever, 'THE STORE')
-
     this.callService.getPeerId().subscribe((response: any) => {
       this.serverPeerId = response.peerID;
     })
@@ -67,11 +64,11 @@ export class SenderComponent implements OnInit, OnDestroy {
         switchMap((peerId) =>
           joinCall
             ? // sets the ID TO CONNECT TOO
-              of(this.callService.establishMediaCall(peerId))
+            of(this.callService.establishMediaCall(peerId))
             : of(this.callService.enableCallAnswer())
         )
       )
-      .subscribe((_) => {});
+      .subscribe((_) => { });
   }
 
   public endCall() {

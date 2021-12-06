@@ -14,12 +14,10 @@ export class WebSocketService {
 
     this.webSocket.onopen = (event: any) => {
       this.webSocket.send(peerId);
-      console.log('Open', event)
     }
 
     this.webSocket.onmessage = (event: any) => {
       // this.peerID = JSON.parse(event.data)
-      console.log(event, 'whats the fuck');
     };
 
     this.webSocket.onclose = (event: any) => {

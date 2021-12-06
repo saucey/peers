@@ -31,7 +31,6 @@ export class RecieverComponent implements OnInit, OnDestroy {
 
     this.callService.setPeerID(this.peerId);
     this.callService.peerIdOfdReciever;
-    console.log(this.callService.peerIdOfdReciever, 'here');
     this.callService.enableCallAnswer();
   }
 
@@ -68,11 +67,11 @@ export class RecieverComponent implements OnInit, OnDestroy {
         switchMap((peerId) =>
           joinCall
             ? // sets the ID TO CONNECT TOO
-              of(this.callService.establishMediaCall(peerId))
+            of(this.callService.establishMediaCall(peerId))
             : of(this.callService.enableCallAnswer())
         )
       )
-      .subscribe((_) => {});
+      .subscribe((_) => { });
   }
 
   public endCall() {

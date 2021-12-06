@@ -33,7 +33,7 @@ wss.on('connection', ws => {
   });
 
   ws.on('error', error => {
-    // OnError(error);
+    // OnError(error)ls
   });
 
   ws.on('close', ws => {
@@ -44,3 +44,5 @@ wss.on('connection', ws => {
 app.get('/api/peer-id', (req, res) => res.json({ peerID: this.peerID }));
 
 server.listen(8889, () => console.log('Listening on port: 8889'))
+
+
