@@ -16,4 +16,8 @@ export class HomeComponent {
   goToVideoCall() {
     this.router.navigate(['/call-sender']);
   }
+
+  goToHostCam() {
+    this.router.navigate(['/call-reciever']);
+  }
 }
