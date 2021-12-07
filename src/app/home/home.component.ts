@@ -9,11 +9,11 @@ declare var Peer: any;
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent {
-  constructor(public router: Router) {}
+  constructor(public router: Router) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   goToVideoCall() {
-    this.router.navigate(['/call-reciever']);
+    this.router.navigate(['/call-sender']);
   }
 }
