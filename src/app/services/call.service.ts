@@ -25,7 +25,7 @@ export class CallService {
   private isCallStartedBs = new Subject<boolean>();
   public isCallStarted$ = this.isCallStartedBs.asObservable();
 
-  constructor(private snackBar: MatSnackBar, private http: HttpClient) {}
+  constructor(private snackBar: MatSnackBar, private http: HttpClient) { }
 
   public initPeer(): any {
     if (!this.peer || this.peer.disconnected) {
@@ -44,8 +44,36 @@ export class CallService {
       };
 
       try {
-        let id = uuidv4();
-        this.peer = new Peer(id, peerJsOptions);
+        // let id = uuidv4();
+        let id = 'xyz123'
+        this.peer = new Peer(id);
+        return id;
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  }
+
+  public initPeer2(): any {
+    if (!this.peer || this.peer.disconnected) {
+      const peerJsOptions: any = {
+        debug: 3,
+        config: {
+          iceServers: [
+            {
+              urls: [
+                'stun:stun1.l.google.com:19302',
+                'stun:stun2.l.google.com:19302',
+              ],
+            },
+          ],
+        },
+      };
+
+      try {
+        // let id = uuidv4();
+        let id = 'xyz1234'
+        this.peer = new Peer(id);
         return id;
       } catch (error) {
         console.error(error);

@@ -21,11 +21,17 @@ export class SenderComponent implements OnInit, OnDestroy {
 
   constructor(public dialog: MatDialog, private callService: CallService) {
     this.isCallStarted$ = this.callService.isCallStarted$;
-    this.peerId = this.callService.initPeer();
+
+    this.peerId = this.callService.initPeer2();
+
     this.callService.peerIdOfdReciever;
-    this.callService.getPeerId().subscribe((response: any) => {
-      this.serverPeerId = response.peerID;
-    })
+
+    //CALLER
+    // this.callService.getPeerId().subscribe((response: any) => {
+    //   this.serverPeerId = response.peerID;
+    // })
+
+    this.serverPeerId = 'xyz123'
   }
 
   ngOnInit(): void {
@@ -49,27 +55,27 @@ export class SenderComponent implements OnInit, OnDestroy {
     this.callService.establishMediaCall(this.serverPeerId);
   }
 
-  public showModal(joinCall: boolean): void {
-    let dialogData: DialogData = joinCall
-      ? { peerId: null, joinCall: true }
-      : { peerId: this.peerId, joinCall: false };
-    const dialogRef = this.dialog.open(CallInfoDialogComponent, {
-      width: '250px',
-      data: dialogData,
-    });
+  // public showModal(joinCall: boolean): void {
+  //   let dialogData: DialogData = joinCall
+  //     ? { peerId: null, joinCall: true }
+  //     : { peerId: this.peerId, joinCall: false };
+  //   const dialogRef = this.dialog.open(CallInfoDialogComponent, {
+  //     width: '250px',
+  //     data: dialogData,
+  //   });
 
-    dialogRef
-      .afterClosed()
-      .pipe(
-        switchMap((peerId) =>
-          joinCall
-            ? // sets the ID TO CONNECT TOO
-            of(this.callService.establishMediaCall(peerId))
-            : of(this.callService.enableCallAnswer())
-        )
-      )
-      .subscribe((_) => { });
-  }
+  //   dialogRef
+  //     .afterClosed()
+  //     .pipe(
+  //       switchMap((peerId) =>
+  //         joinCall
+  //           ? // sets the ID TO CONNECT TOO
+  //           of(this.callService.establishMediaCall(peerId))
+  //           : of(this.callService.enableCallAnswer())
+  //       )
+  //     )
+  //     .subscribe((_) => { });
+  // }
 
   public endCall() {
     this.callService.closeMediaCall();

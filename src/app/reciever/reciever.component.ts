@@ -52,27 +52,27 @@ export class RecieverComponent implements OnInit, OnDestroy {
     this.webSocketService.closeWebSocket();
   }
 
-  public showModal(joinCall: boolean): void {
-    let dialogData: DialogData = joinCall
-      ? { peerId: null, joinCall: true }
-      : { peerId: this.peerId, joinCall: false };
-    const dialogRef = this.dialog.open(CallInfoDialogComponent, {
-      width: '250px',
-      data: dialogData,
-    });
+  // public showModal(joinCall: boolean): void {
+  //   let dialogData: DialogData = joinCall
+  //     ? { peerId: null, joinCall: true }
+  //     : { peerId: this.peerId, joinCall: false };
+  //   const dialogRef = this.dialog.open(CallInfoDialogComponent, {
+  //     width: '250px',
+  //     data: dialogData,
+  //   });
 
-    dialogRef
-      .afterClosed()
-      .pipe(
-        switchMap((peerId) =>
-          joinCall
-            ? // sets the ID TO CONNECT TOO
-            of(this.callService.establishMediaCall(peerId))
-            : of(this.callService.enableCallAnswer())
-        )
-      )
-      .subscribe((_) => { });
-  }
+  //   dialogRef
+  //     .afterClosed()
+  //     .pipe(
+  //       switchMap((peerId) =>
+  //         joinCall
+  //           ? // sets the ID TO CONNECT TOO
+  //           of(this.callService.establishMediaCall(peerId))
+  //           : of(this.callService.enableCallAnswer())
+  //       )
+  //     )
+  //     .subscribe((_) => { });
+  // }
 
   public endCall() {
     this.callService.closeMediaCall();
