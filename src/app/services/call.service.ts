@@ -46,7 +46,7 @@ export class CallService {
       try {
         // let id = uuidv4();
         let id = 'xyz123'
-        this.peer = new Peer(id);
+        this.peer = new Peer(id, peerJsOptions);
         return id;
       } catch (error) {
         console.error(error);
@@ -71,9 +71,8 @@ export class CallService {
       };
 
       try {
-        // let id = uuidv4();
-        let id = 'xyz1234'
-        this.peer = new Peer(id);
+        let id = uuidv4();
+        this.peer = new Peer(id, peerJsOptions);
         return id;
       } catch (error) {
         console.error(error);
