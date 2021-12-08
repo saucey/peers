@@ -30,18 +30,11 @@ export class CallService {
   public initPeer(): any {
     if (!this.peer || this.peer.disconnected) {
       const peerJsOptions: any = {
-        debug: 3,
-        config: {
-          iceServers: [
-            {
-              urls: [
-                'stun:stun1.l.google.com:19302',
-                'stun:stun2.l.google.com:19302',
-              ],
-            },
-          ],
-        },
-      };
+        host: "0.peerjs.com",
+        port: 443,
+        path: "/",
+        pingInterval: 5000,
+      }
 
       try {
         // let id = uuidv4();
@@ -57,18 +50,11 @@ export class CallService {
   public initPeer2(): any {
     if (!this.peer || this.peer.disconnected) {
       const peerJsOptions: any = {
-        debug: 3,
-        config: {
-          iceServers: [
-            {
-              urls: [
-                'stun:stun1.l.google.com:19302',
-                'stun:stun2.l.google.com:19302',
-              ],
-            },
-          ],
-        },
-      };
+        host: "0.peerjs.com",
+        port: 443,
+        path: "/",
+        pingInterval: 5000,
+      }
 
       try {
         let id = uuidv4();
