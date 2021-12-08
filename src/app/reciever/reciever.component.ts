@@ -27,7 +27,7 @@ export class RecieverComponent implements OnInit, OnDestroy {
 
     this.isCallStarted$ = this.callService.isCallStarted$;
     this.peerId = this.callService.initPeer();
-    this.webSocketService.openWebSocketWithPeerID(this.peerId);
+    // this.webSocketService.openWebSocketWithPeerID(this.peerId);
 
     this.callService.setPeerID(this.peerId);
     this.callService.peerIdOfdReciever;

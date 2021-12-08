@@ -31,7 +31,7 @@ export class SenderComponent implements OnInit, OnDestroy {
     //   this.serverPeerId = response.peerID;
     // })
 
-    this.serverPeerId = 'xyz123'
+    this.serverPeerId = 'xyz123aaa'
   }
 
   ngOnInit(): void {
