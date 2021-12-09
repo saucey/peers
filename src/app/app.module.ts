@@ -11,7 +11,7 @@ const config: SocketIoConfig = {
   url: 'localhost:8889', // socket server url;
 
   options: {
-    path: "/socket",
+    path: "/socket/",
     transports: ['websocket']
   }
 }

@@ -8,7 +8,7 @@ app.use(express.json());
 const server = require('http').createServer(app)
 // const wss = new WebSocket.Server({ server: server });
 const io = new Server(server, {
-  path: "/socket"
+  path: "/socket/"
 });
 var port = process.env.PORT || 8889;
 
