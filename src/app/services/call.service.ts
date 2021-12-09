@@ -63,8 +63,9 @@ export class CallService {
         //   host: '/',
         //   port: '3000'
         // });
+        console.log('set peers')
 
-        this.peer = new Peer(undefined, { host: 'peerjs-server.herokuapp.com', secure: true, port: 443 })
+        this.peer = new Peer(undefined, peerJsOptions)
 
         this.peer.on('open', (id: any) => {
           console.log(id, 'peer ID')
