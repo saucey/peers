@@ -7,7 +7,9 @@ app.use(cors())
 app.use(express.json());
 const server = require('http').createServer(app)
 // const wss = new WebSocket.Server({ server: server });
-const io = new Server(server);
+const io = new Server(server, {
+  path: "/socket"
+});
 var port = process.env.PORT || 8889;
 
 // peer_server

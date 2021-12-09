@@ -9,7 +9,9 @@ import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 
 const config: SocketIoConfig = {
   url: 'localhost:8889', // socket server url;
+
   options: {
+    path: "/socket",
     transports: ['websocket']
   }
 }
