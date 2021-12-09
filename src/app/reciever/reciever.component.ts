@@ -4,7 +4,7 @@ import { Observable, of } from 'rxjs';
 import { CallInfoDialogComponent, DialogData } from '../callinfo-dialog/callinfo-dialog.component';
 import { switchMap, filter } from 'rxjs/operators';
 import { CallService } from '../services/call.service';
-import { WebSocketService } from '../services/web-socket.service';
+import { Socket } from 'ngx-socket-io';
 
 @Component({
   selector: 'reciever',
@@ -14,7 +14,6 @@ import { WebSocketService } from '../services/web-socket.service';
 })
 export class RecieverComponent implements OnInit, OnDestroy {
   public isCallStarted$: Observable<boolean>;
-  private peerId: string;
 
   @ViewChild('localVideo') localVideo!: ElementRef<HTMLVideoElement>;
   @ViewChild('remoteVideo') remoteVideo!: ElementRef<HTMLVideoElement>;
@@ -22,15 +21,11 @@ export class RecieverComponent implements OnInit, OnDestroy {
   constructor(
     public dialog: MatDialog,
     private callService: CallService,
-    public webSocketService: WebSocketService
+    // public socket: Socket
   ) {
 
     this.isCallStarted$ = this.callService.isCallStarted$;
-    this.peerId = this.callService.initPeer();
-    // this.webSocketService.openWebSocketWithPeerID(this.peerId);
-
-    this.callService.setPeerID(this.peerId);
-    this.callService.peerIdOfdReciever;
+    this.callService.initPeer();
     this.callService.enableCallAnswer();
   }
 
@@ -49,30 +44,7 @@ export class RecieverComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.callService.destroyPeer();
-    this.webSocketService.closeWebSocket();
   }
-
-  // public showModal(joinCall: boolean): void {
-  //   let dialogData: DialogData = joinCall
-  //     ? { peerId: null, joinCall: true }
-  //     : { peerId: this.peerId, joinCall: false };
-  //   const dialogRef = this.dialog.open(CallInfoDialogComponent, {
-  //     width: '250px',
-  //     data: dialogData,
-  //   });
-
-  //   dialogRef
-  //     .afterClosed()
-  //     .pipe(
-  //       switchMap((peerId) =>
-  //         joinCall
-  //           ? // sets the ID TO CONNECT TOO
-  //           of(this.callService.establishMediaCall(peerId))
-  //           : of(this.callService.enableCallAnswer())
-  //       )
-  //     )
-  //     .subscribe((_) => { });
-  // }
 
   public endCall() {
     this.callService.closeMediaCall();

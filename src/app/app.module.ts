@@ -5,6 +5,15 @@ import { Route, RouterModule } from '@angular/router';
 import { TemplateComponent } from './template/template.component';
 import { TemplateModule } from './template/template.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+
+const config: SocketIoConfig = {
+  url: 'safestore.designanddev.co.uk:8889', // socket server url;
+  options: {
+    transports: ['websocket']
+  }
+}
+
 
 export const mainRoute: Route[] = [
   {
@@ -36,8 +45,9 @@ export const mainRoute: Route[] = [
     BrowserAnimationsModule,
     TemplateModule,
     RouterModule.forRoot(mainRoute),
+    SocketIoModule.forRoot(config),
   ],
   providers: [],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

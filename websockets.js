@@ -1,46 +1,43 @@
-const express = require('express');
 const cors = require('cors')
-const WebSocket = require('ws');
-
-const app = express();
+const { Server } = require("socket.io");
+// const WebSocket = require('ws');
+var express = require('express');
+var app = express();
 app.use(cors())
 app.use(express.json());
 const server = require('http').createServer(app)
-const wss = new WebSocket.Server({ server: server });
+// const wss = new WebSocket.Server({ server: server });
+const io = new Server(server);
+var port = process.env.PORT || 8889;
 
+// peer_server
+var ExpressPeerServer = require('peer').ExpressPeerServer;
+var peerExpress = require('express');
+var peerApp = peerExpress();
+var peerServer = require('http').createServer(peerApp);
+var options = { debug: true }
+var peerPort = 3000;
 
-wss.getUniqueID = function () {
-  function s4() {
-    return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
-  }
-  return s4() + s4() + '-' + s4();
-};
+peerApp.use('/peerjs', ExpressPeerServer(peerServer, options));
+
+server.listen(port);
+peerServer.listen(peerPort);
 
 clients = []
 
-wss.on('connection', ws => {
+var peerID = ''
 
+io.on('connection', socket => {
+  socket.on('peerID', (id) => {
+    console.log(id, 'ID sent!!!!')
+    peerID = id
+  })
 
-  ws.on('message', message => {
-    this.peerID = message.toString();
-    console.log('recieved:', this.peerID)
-  });
+  socket.on('getId', (id) => {
+    console.log(peerID.id, 'ID recieved!!!!')
+    socket.emit('message', peerID.id);
+  })
+})
 
-  ws.id = wss.getUniqueID();
+app.get('/api/peer-id', (req, res) => res.json({ peerID: peerID }));
 
-  wss.clients.forEach(function each(client) {
-    console.log('Client.ID: ' + client.id);
-  });
-
-  ws.on('error', error => {
-    // OnError(error);
-  });
-
-  ws.on('close', ws => {
-    // onClose();
-  });
-});
-
-app.get('/api/peer-id', (req, res) => res.json({ peerID: this.peerID }));
-
-server.listen(8889, () => console.log('Listening on port: 8889'))

@@ -6,14 +6,15 @@ import { v4 as uuidv4 } from 'uuid';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ThisReceiver } from '@angular/compiler';
 import { catchError, retry } from 'rxjs/operators';
-
+import { Socket } from 'ngx-socket-io';
 declare var Peer: any;
 
 @Injectable()
 export class CallService {
+
+
   private peer!: any;
   private mediaCall!: any;
-  public peerIdOfdReciever!: string;
 
   private localStreamBs: BehaviorSubject<MediaStream> =
     new BehaviorSubject<any>(null);
@@ -25,22 +26,48 @@ export class CallService {
   private isCallStartedBs = new Subject<boolean>();
   public isCallStarted$ = this.isCallStartedBs.asObservable();
 
-  constructor(private snackBar: MatSnackBar, private http: HttpClient) { }
+  constructor(public socket: Socket, private snackBar: MatSnackBar, private http: HttpClient) { }
+
+  public checkSafari() {
+    let seemsChrome = navigator.userAgent.indexOf("Chrome") > -1;
+    let seemsSafari = navigator.userAgent.indexOf("Safari") > -1;
+    return seemsSafari && !seemsChrome;
+  }
 
   public initPeer(): any {
+    let peerJsOptions: any = {};
+
     if (!this.peer || this.peer.disconnected) {
-      const peerJsOptions: any = {
-        host: "0.peerjs.com",
-        port: 443,
-        path: "/",
-        pingInterval: 5000,
+      peerJsOptions = {
+        debug: 3,
+        config: {
+          iceServers: [
+            {
+              urls: [
+                'stun:stun1.l.google.com:19302',
+                'stun:stun2.l.google.com:19302',
+              ],
+            },
+          ],
+        },
+      };
+
+      if (this.checkSafari()) {
+        peerJsOptions.serialization = "json";
       }
 
       try {
-        // let id = uuidv4();
-        let id = 'xyz123aaa'
-        this.peer = new Peer(id, peerJsOptions);
-        return id;
+        // this.peer = new Peer(id, peerJsOptions);
+        this.peer = new Peer(undefined, {
+          path: '/peerjs',
+          host: '/',
+          port: '3000'
+        });
+
+        this.peer.on('open', (id: any) => {
+          this.socket.emit('peerID', { id: id });
+        })
+
       } catch (error) {
         console.error(error);
       }
@@ -48,18 +75,40 @@ export class CallService {
   }
 
   public initPeer2(): any {
+    let peerJsOptions: any = {};
+
     if (!this.peer || this.peer.disconnected) {
-      const peerJsOptions: any = {
-        host: "0.peerjs.com",
-        port: 443,
-        path: "/",
-        pingInterval: 5000,
+
+      peerJsOptions = {
+        debug: 3,
+        config: {
+          iceServers: [
+            {
+              urls: [
+                'stun:stun1.l.google.com:19302',
+                'stun:stun2.l.google.com:19302',
+              ],
+            },
+          ],
+        },
+      };
+
+      if (this.checkSafari()) {
+        peerJsOptions.serialization = "json";
       }
 
       try {
-        let id = uuidv4();
-        this.peer = new Peer(id, peerJsOptions);
-        return id;
+        this.peer = new Peer(undefined, {
+          path: '/peerjs',
+          host: '/',
+          port: '3000'
+        });
+
+        this.peer.on('open', (id: any) => {
+          this.socket.emit('getId', { id: id });
+        })
+
+
       } catch (error) {
         console.error(error);
       }
@@ -85,6 +134,8 @@ export class CallService {
         this.snackBar.open(errorMessage, 'Close');
         throw new Error(errorMessage);
       }
+
+      console.log(stream, 'make call !!!!!!!!!!!!')
       this.localStreamBs.next(stream);
       this.isCallStartedBs.next(true);
 
@@ -110,6 +161,7 @@ export class CallService {
         video: true,
         audio: true,
       });
+      console.log(stream, 'answer call !!!!!!!!!!!!')
       this.localStreamBs.next(stream);
       this.peer.on('call', async (call: any) => {
         this.mediaCall = call;
@@ -131,10 +183,6 @@ export class CallService {
       this.snackBar.open(ex as any, 'Close');
       this.isCallStartedBs.next(false);
     }
-  }
-
-  public setPeerID(peerID: string) {
-    this.peerIdOfdReciever = peerID;
   }
 
   private onCallClose() {
