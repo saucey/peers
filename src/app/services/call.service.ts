@@ -101,11 +101,12 @@ export class CallService {
       }
 
       try {
-        this.peer = new Peer(undefined, {
-          path: '/peerjs',
-          host: '/',
-          port: '3000'
-        });
+        // this.peer = new Peer(undefined, {
+        //   path: '/peerjs',
+        //   host: '/',
+        //   port: '3000'
+        // });
+        this.peer = new Peer(undefined, peerJsOptions)
 
         this.peer.on('open', (id: any) => {
           this.socket.emit('getId', { id: id });

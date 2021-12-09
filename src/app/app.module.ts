@@ -8,7 +8,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 
 const config: SocketIoConfig = {
-  url: '139.59.175.74:8889', // socket server url;
+  url: '127.0.0.1:8889', // socket server url;
   options: {
     transports: ['websocket']
   }
