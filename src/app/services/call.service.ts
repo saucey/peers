@@ -58,13 +58,13 @@ export class CallService {
 
       try {
         // this.peer = new Peer(id, peerJsOptions);
-        this.peer = new Peer(undefined, {
-          path: '/peerjs',
-          host: '/',
-          port: '3000'
-        });
+        // this.peer = new Peer(undefined, {
+        //   path: '/peerjs',
+        //   host: '/',
+        //   port: '3000'
+        // });
         console.log('set peers')
-        // this.peer = new Peer(undefined, peerJsOptions)
+        this.peer = new Peer(undefined, peerJsOptions)
 
         this.peer.on('open', (id: any) => {
           console.log(id, 'peer ID')
